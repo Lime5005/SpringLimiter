@@ -1,5 +1,6 @@
 package com.example.springlimiter.controller;
 
+import com.example.springlimiter.Limit;
 import com.google.common.util.concurrent.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,5 +38,18 @@ public class LimitController {
         return "Request succeed!";
     }
 
+    @GetMapping("/test2")
+    @Limit(key = "limit2", permitsPerSecond = 1, timeout = 10, timeunit = TimeUnit.MILLISECONDS, msg = "Too crowd, please retry later!")
+    public String limit2() {
+        log.info("Success: Token bucket 2 get token");
+        return "OK";
+    }
+
+    @GetMapping("/test3")
+    @Limit(key = "limit3", permitsPerSecond = 2, timeout = 10, timeunit = TimeUnit.MILLISECONDS, msg = "The server is busy, please retry later!")
+    public String limit3() {
+        log.info("Success: Token bucket 3 get token");
+        return "OK";
+    }
 
 }
